@@ -1,5 +1,5 @@
 from flask import Flask, request, render_template, jsonify, send_file
-from PIL import Image, ImageDraw, ImageFont, ImageTk
+from PIL import Image, ImageDraw, ImageFont
 from rembg import remove
 import io
 import os
