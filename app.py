@@ -8,10 +8,23 @@ import random
 import colorsys
 import uuid
 import base64
+import logging
+from logging.handlers import RotatingFileHandler
+import sys
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'uploads'
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max file size
+
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s [%(levelname)s] %(message)s',
+    handlers=[
+        logging.StreamHandler(sys.stdout)
+    ]
+)
+logger = logging.getLogger(__name__)
 
 # Ensure upload directory exists
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
@@ -189,7 +202,8 @@ def process():
         })
         
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        logger.error(f"Error processing image: {str(e)}")
+        return jsonify({'error': 'Error processing image'}), 500
 
 @app.route('/download', methods=['POST'])
 def download():
@@ -210,6 +224,20 @@ def download():
         as_attachment=True,
         download_name='birthday_image.png'
     )
+
+# Setup error handling
+@app.errorhandler(500)
+def handle_500_error(e):
+    logger.error(f"Internal server error: {str(e)}")
+    return jsonify({'error': 'Internal server error occurred'}), 500
+
+@app.errorhandler(404)
+def handle_404_error(e):
+    return jsonify({'error': 'Resource not found'}), 404
+
+# Add startup logging
+logger.info("Application starting...")
+logger.info(f"Upload folder: {app.config['UPLOAD_FOLDER']}")
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))

@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: birthday-image-generator
+    env: python
+    buildCommand: |
+      apt-get update && apt-get install -y libgl1-mesa-glx libglib2.0-0
+      pip install -r requirements.txt
+    startCommand: gunicorn app:app --config gunicorn.conf.py
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.9.0
+      - key: PORT
+        value: 10000
+    autoDeploy: false
