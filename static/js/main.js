@@ -1,4 +1,15 @@
 document.addEventListener('DOMContentLoaded', function() {
+    // Create startup notification element
+    const startupNotification = document.createElement('div');
+    startupNotification.className = 'startup-overlay';
+    startupNotification.innerHTML = `
+        <div style="display: flex; align-items: center; justify-content: center; gap: 10px;">
+            <div class="loader" style="width: 20px; height: 20px;"></div>
+            <span>Service is starting up, this might take a minute...</span>
+        </div>
+    `;
+    document.body.appendChild(startupNotification);
+
     const dropZone = document.getElementById('dropZone');
     const fileInput = document.getElementById('fileInput');
     const controls = document.getElementById('controls');
@@ -80,30 +91,39 @@ document.addEventListener('DOMContentLoaded', function() {
             originalPreview.src = e.target.result;
         };
         reader.readAsDataURL(file);
-    }
-
-    async function processImage() {
+    }    async function processImage() {
         if (!currentFile) {
             alert('Please select an image first');
             return;
         }
 
         loadingOverlay.style.display = 'flex';
+        const startupNotification = document.querySelector('.startup-overlay');
 
         const formData = new FormData();
         formData.append('image', currentFile);
         formData.append('text', textInput.value);
         formData.append('double_line', doubleLineCheckbox.checked);
 
-        try {
+        try {            const startTime = Date.now();
             const response = await fetch('/process', {
                 method: 'POST',
                 body: formData
             });
 
             const data = await response.json();
+            const processTime = Date.now() - startTime;
+
+            // If response took more than 10 seconds, it likely was a cold start
+            if (processTime > 10000) {
+                startupNotification.style.display = 'none';
+            }
 
             if (data.error) {
+                // If we get a 503 or timeout, show the startup notification
+                if (data.error.includes('timeout') || response.status === 503) {
+                    startupNotification.style.display = 'block';
+                }
                 throw new Error(data.error);
             }
 
