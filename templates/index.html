@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Birthday Image Generator</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Birthday Image Generator</h1>
+        
+        <div class="upload-section">
+            <div class="drop-zone" id="dropZone">
+                <div class="drop-zone-text">
+                    <p>Drop image here or click to upload</p>
+                    <p class="small">(Supports PNG, JPG, JPEG)</p>
+                </div>
+                <input type="file" id="fileInput" accept="image/*" hidden>
+            </div>
+        </div>
+
+        <div class="controls" id="controls" style="display: none;">
+            <div class="input-group">
+                <label for="textInput">Birthday Text:</label>
+                <input type="text" id="textInput" value="Happy Birthday" placeholder="Enter birthday message">
+            </div>
+
+            <div class="input-group">
+                <label for="doubleLineCheckbox" class="checkbox-label">
+                    <input type="checkbox" id="doubleLineCheckbox" checked>
+                    Use Double Line Text (for landscape images)
+                </label>
+            </div>
+
+            <button id="processBtn" class="primary-button">Process Image</button>
+        </div>
+
+        <div class="preview-section" id="previewSection" style="display: none;">
+            <div class="image-preview">
+                <h3>Original Image:</h3>
+                <img id="originalPreview" alt="Original image preview">
+            </div>
+            
+            <div class="image-preview">
+                <h3>Processed Image:</h3>
+                <img id="processedPreview" alt="Processed image preview">
+            </div>
+
+            <button id="downloadBtn" class="secondary-button">Download Image</button>
+            <button id="regenerateBtn" class="secondary-button">Regenerate Text</button>
+        </div>
+
+        <div id="loadingOverlay" class="loading-overlay" style="display: none;">
+            <div class="loader"></div>
+            <p>Processing image...</p>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
