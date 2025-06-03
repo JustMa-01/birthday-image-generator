@@ -2,11 +2,13 @@ services:
   - type: web
     name: birthday-image-generator
     env: python
+    python_version: 3.9.0
     buildCommand: |
       apt-get update && apt-get install -y libgl1-mesa-glx libglib2.0-0
       python -m pip install --upgrade pip
-      pip install torch==1.13.1 torchvision==0.14.1 --index-url https://download.pytorch.org/whl/cpu
-      pip install -r requirements.txt
+      pip install --no-cache-dir torch torchvision --index-url https://download.pytorch.org/whl/cpu
+      pip install --no-cache-dir -r requirements.txt
+    startCommand: gunicorn app:app --config gunicorn.conf.py
     startCommand: gunicorn app:app --config gunicorn.conf.py
     envVars:
       - key: PYTHON_VERSION

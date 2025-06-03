@@ -1,6 +1,6 @@
-flask==2.0.1
-pillow==9.5.0
-rembg==2.0.51
-gunicorn==20.1.0
-numpy==1.21.1
-opencv-python-headless==4.7.0.72
+flask
+pillow
+rembg
+gunicorn
+numpy
+opencv-python-headless
