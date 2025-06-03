@@ -4,3 +4,4 @@ rembg
 gunicorn
 numpy
 opencv-python-headless
+onnxruntime
