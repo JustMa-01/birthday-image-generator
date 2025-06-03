@@ -1,7 +1,6 @@
-flask==2.3.3
-pillow==10.0.0
-rembg==2.0.50
-gunicorn==21.2.0
-numpy==1.24.3
-opencv-python-headless==4.8.0.76
-u2net==0.8.6
+flask==2.0.1
+pillow==9.5.0
+rembg==2.0.51
+gunicorn==20.1.0
+numpy==1.21.1
+opencv-python-headless==4.7.0.72
